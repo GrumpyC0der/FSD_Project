@@ -1,0 +1,59 @@
+﻿@page "/orders/orderitems"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Add Order Items</h3>
+<hr />
+<br />
+
+<EditForm Model="@orderitem" OnValidSubmit="AddOrderItem">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class=" form-group">
+        <label>Select Food: </label>
+        <div>
+            <InputSelect @bind-Value="@orderitem.FoodID" class="form-control">
+                <option value="">-- Select Food--</option>
+                @if (Foods != null)
+                {
+                    foreach (var food in Foods)
+                    {
+                        <option value="@food.Id">@food.FoodName,@food.FoodStore</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => orderitem.FoodID)" />
+        </div>
+    </div>
+    <div class=" form-group">
+        <label>Order Fee: </label>
+        <div>
+            <InputNumber @bind-Value="@orderitem.OrderQuantity" class="form-control" />
+            <ValidationMessage For="@(() => orderitem.OrderQuantity)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-block">
+        Add Order Items
+    </button>
+</EditForm>
+
+@code{
+    OrderItem orderitem = new OrderItem();
+
+    private IList<Order> Orders;
+    private IList<Food> Foods;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Orders = await _client.GetFromJsonAsync<List<Order>>($"{Endpoints.OrdersEndpoint}");
+        Foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+    }
+
+    private async Task AddOrderItem()
+    {
+        await _client.PostAsJsonAsync(Endpoints.OrdersEndpoint, orderitem);
+        _navManager.NavigateTo("/orders/");
+    }
+
+
+} 

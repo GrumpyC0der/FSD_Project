@@ -1,0 +1,23 @@
+﻿@page "/foodstores/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit FoodStore</h3>
+
+<FormComponent ButtonText="Update" OnValidSubmit="EditFoodStore" foodstore="foodstore" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    FoodStore foodstore = new FoodStore();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        foodstore = await _client.GetFromJsonAsync<FoodStore>($"{Endpoints.FoodStoresEndpoint}/{id}");
+    }
+
+    async Task EditFoodStore()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.FoodStoresEndpoint}/{id}", foodstore);
+        _navManager.NavigateTo("/foodstores/");
+    }
+}

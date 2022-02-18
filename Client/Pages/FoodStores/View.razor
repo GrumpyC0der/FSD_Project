@@ -1,0 +1,18 @@
+﻿@page "/foodstores/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>View</h3>
+
+<FormComponent foodstore="foodstore" Disabled="true" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    FoodStore foodstore = new FoodStore();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        foodstore = await
+       _client.GetFromJsonAsync<FoodStore>($"{Endpoints.FoodStoresEndpoint}/{id}");
+    }
+}

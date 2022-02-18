@@ -1,0 +1,57 @@
+﻿@page "/staffs/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create new Staff</h3>
+<hr />
+<br />
+
+<EditForm Model="@staff" OnValidSubmit="CreateStaff">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class=" form-group">
+        <label>Staff Name: </label>
+        <div>
+            <InputText @bind-Value="@staff.StaffName" class="form-control" />
+            <ValidationMessage For="@(() => staff.StaffName)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Staff Position: </label>
+        <div>
+            <InputText @bind-Value="@staff.StaffPosition" class="form-control" />
+            <ValidationMessage For="@(() => staff.StaffPosition)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Staff Contact: </label>
+        <div>
+            <InputNumber @bind-Value="@staff.StaffContact" class="form-control" />
+            <ValidationMessage For="@(() => staff.StaffContact)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-block">
+        Create Staff
+    </button>
+</EditForm>
+
+@code{
+    Staff staff = new Staff();
+
+    private IList<Order> Orders;
+    private IList<Customer> Customers;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Orders = await _client.GetFromJsonAsync<List<Order>>($"{Endpoints.OrdersEndpoint}");
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+    }
+
+    private async Task CreateStaff()
+    {
+        await _client.PostAsJsonAsync(Endpoints.StaffsEndpoint, staff);
+        _navManager.NavigateTo("/staffs/");
+    }
+} 

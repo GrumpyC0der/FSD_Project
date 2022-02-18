@@ -1,0 +1,104 @@
+﻿@page "/orders/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create new Order</h3>
+<hr />
+<br />
+
+<EditForm Model="@order" OnValidSubmit="CreateOrder">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class=" form-group">
+        <label>Order Name: </label>
+        <div>
+            <InputSelect @bind-Value="@order.CustomerID" class="form-control">
+                <option value="">-- Select Customer--</option>
+                @if (Customers != null)
+                {
+                    foreach (var customer in Customers)
+                    {
+                        <option value="@customer.Id">@customer.CustomerName</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => order.CustomerID)" />
+        </div>
+    </div>
+    <!-- <div class=" form-group">
+         <label>Order Fee: </label>
+         <div>
+             <InputNumber @bind-Value="@order.OrderFee" class="form-control" />
+             <ValidationMessage For="@(() => order.OrderFee)" />
+         </div>
+     </div> -->
+    <div class=" form-group">
+        <label>Order Date Time: </label>
+        <div>
+            <InputDate @bind-Value="@order.OrderTime" class="form-control" />
+            <ValidationMessage For="@(() => order.OrderTime)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Deliverer: </label>
+        <div>
+            <InputSelect @bind-Value="@order.StaffID" class="form-control">
+                <option value="">-- Select Deliverer--</option>
+                @if (Staffs != null)
+                {
+                    foreach (var staff in Staffs)
+                    {
+                        <option value="@staff.Id">@staff.StaffName, @staff.StaffPosition</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => order.StaffID)" />
+        </div>
+    </div>
+    <div class=" form-group">
+        <label>Payment Type: </label>
+        <div>
+            <InputSelect @bind-Value="@order.PaymentID" class="form-control">
+                <option value="">-- Select Payment--</option>
+                @if (Payments != null)
+                {
+                    foreach (var payment in Payments)
+                    {
+                        <option value="@payment.Id">@payment.PaymentType</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => order.PaymentID)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-block">
+        Create Order
+    </button>
+</EditForm>
+
+<!--
+<FormComponent ButtonText="Create Order" order="order" OnValidSubmit="@CreateOrder" />
+    -->
+@code{
+    Order order = new Order();
+
+    private IList<Customer> Customers;
+    private IList<Staff> Staffs;
+    private IList<Payment> Payments;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+        Staffs = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+        Payments = await _client.GetFromJsonAsync<List<Payment>>($"{Endpoints.PaymentsEndpoint}");
+    }
+
+    private async Task CreateOrder()
+    {
+        await _client.PostAsJsonAsync(Endpoints.OrdersEndpoint, order);
+        _navManager.NavigateTo("/orders/");
+    }
+
+
+} 

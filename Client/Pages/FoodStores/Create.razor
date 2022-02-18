@@ -1,0 +1,65 @@
+﻿@page "/foodstores/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create new FoodStore</h3>
+<hr />
+<br />
+<!--
+<EditForm Model="@foodstore" OnValidSubmit="CreateFoodStore">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class=" form-group">
+        <label>Food Store Name: </label>
+        <div>
+            <InputText @bind-Value="@foodstore.FoodName" class="form-control" />
+            <ValidationMessage For="@(() => foodstore.FoodName)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Food Store Address: </label>
+        <div>
+            <InputText @bind-Value="@foodstore.FoodStoreAddress" class="form-control" />
+            <ValidationMessage For="@(() => foodstore.FoodStoreAddress)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Food Store Quantity: </label>
+        <div>
+            <InputNumber @bind-Value="@foodstore.FoodStoreQuantity" class="form-control" />
+            <ValidationMessage For="@(() => foodstore.FoodStoreQuantity)" />
+        </div>
+    </div>
+    <div class=" form-group">
+        <label>Food Store Quantity: </label>
+        <div>
+            <InputSelect @bind-Value="@foodstore.FoodStoreArea" class="form-control">
+                <option value="">-- Select Area--</option>
+                <option value="">North</option>
+                <option value="">Central</option>
+                <option value="">South</option>
+                <option value="">East</option>
+                <option value="">West</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => foodstore.FoodStoreQuantity)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-block">
+        Create Food Store
+    </button>
+</EditForm>
+    -->
+
+<FormComponent ButtonText="Create FoodStore" foodstore="foodstore" OnValidSubmit="@CreateFoodStore" />
+@code{
+    FoodStore foodstore = new FoodStore();
+
+
+    private async Task CreateFoodStore()
+    {
+        await _client.PostAsJsonAsync(Endpoints.FoodStoresEndpoint, foodstore);
+        _navManager.NavigateTo("/foodstores/");
+    }
+} 

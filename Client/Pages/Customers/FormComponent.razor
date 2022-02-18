@@ -1,0 +1,40 @@
+﻿<EditForm Model="@customer" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+        <div class="form‐group">
+            <label>Name: </label>
+            <div>
+                <InputText @bind-Value="@customer.CustomerName" class="form‐control" />
+                <ValidationMessage For="@(() => customer.CustomerName)" />
+            </div>
+        </div>
+        <div class="form‐group">
+            <label>Address: </label>
+            <div>
+                <InputText @bind-Value="@customer.CustomerAddress" class="form‐control" />
+                <ValidationMessage For="@(() => customer.CustomerAddress)" />
+            </div>
+        </div>
+        <div class="form‐group">
+            <label>Contact No: </label>
+            <div>
+                <InputNumber @bind-Value="@customer.CustomerContact" class="form‐control" />
+                <ValidationMessage For="@(() => customer.CustomerContact)" />
+            </div>
+        </div>
+    @if (!Disabled)
+    {
+        <br />
+    <button type="submit" class="btn btn-success btn-block">
+        @ButtonText
+    </button>
+    }
+    <BacktoList Target="customers" />
+</EditForm>
+
+@code { 
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public Customer customer { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; } 
+    }

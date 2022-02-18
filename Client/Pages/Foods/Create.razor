@@ -1,0 +1,66 @@
+﻿@page "/foods/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create new Food</h3>
+<hr />
+<br />
+<!--
+<EditForm Model="@food" OnValidSubmit="CreateFood">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class=" form-group">
+        <label>Food Name: </label>
+        <div>
+            <InputText @bind-Value="@food.FoodName" class="form-control" />
+            <ValidationMessage For="@(() => food.FoodName)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Food Position: </label>
+        <div>
+            <InputNumber @bind-Value="@food.FoodPrice" class="form-control" />
+            <ValidationMessage For="@(() => food.FoodPrice)" />
+        </div>
+    </div>
+
+    <div class=" form-group">
+        <label>Food Contact: </label>
+        <div>
+            <InputSelect @bind-Value="@food.FoodStoreID" class="form-control" >
+                <option value="">-- Select Food Store Name--</option>
+                @if (FoodStores != null)
+                    {
+                        foreach(var foodstore in FoodStores)
+                        {
+                            <option value="@foodstore.Id">@foodstore.FoodStoreName</option>
+                        }
+                    }
+            </InputSelect>
+            <ValidationMessage For="@(() => food.FoodStoreID)" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success btn-block">
+        Create Food
+    </button>
+</EditForm>
+    -->
+<FormComponent ButtonText="Create Food" food="food" OnValidSubmit="@CreateFood" />
+
+@code{
+    Food food = new Food();
+
+    private IList<FoodStore> FoodStores;
+
+    protected async override Task OnInitializedAsync()
+    {
+        FoodStores = await _client.GetFromJsonAsync<List<FoodStore>>($"{Endpoints.FoodStoresEndpoint}");
+
+    }
+    private async Task CreateFood()
+    {
+        await _client.PostAsJsonAsync(Endpoints.FoodsEndpoint, food);
+        _navManager.NavigateTo("/foods/");
+    }
+} 
