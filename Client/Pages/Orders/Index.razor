@@ -37,19 +37,19 @@ else
             <tr>
                 <td>@order.Id</td>
                 <td>@order.Customer.CustomerName</td>
-                <td>@order.OrderFee</td>
+                <td>$@order.OrderFee</td>
                 <td>@order.OrderTime</td>
                 <td>@order.Staff.StaffName </td>
                 <td>@order.Payment.PaymentType</td>
                 <td>
                     <a href="/Orders/view/@order.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
+                        <span class="oi oi-eye"></span>
                     </a>
                     <a href="/Orders/edit/@order.Id" class="btn btn-warning">
                         <span class="oi oi-pencil"></span>
                     </a>
-                    <a type="button" href="/Orders/orderitems/@order.Id" class="btn btn-primary btn-block">
-                        Add Order Items
+                    <a href="/Orders/Orderitems/@order.Id" class="btn btn-outline-info">
+                        <span class="oi oi-book"></span>
                     </a>
                     <button class="btn btn-danger" @onclick="@(()=>Delete(order.Id))">
                         <span class="oi oi-delete"></span>
@@ -63,6 +63,7 @@ else
 
 @code {
     private List<Order> Orders;
+    private List<OrderItem> OrderItems;
 
     protected async override Task OnInitializedAsync()
     {
@@ -72,7 +73,7 @@ else
     async Task Delete(int orderId)
     {
         var order = Orders.First(q => q.Id == orderId);
-        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete Order { order.Id}?");
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete Order {order.Id}?");
         if (confirm)
 
         {
@@ -80,5 +81,7 @@ else
             await OnInitializedAsync();
         }
     }
+
+
 
 }

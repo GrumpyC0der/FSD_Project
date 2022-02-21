@@ -5,7 +5,7 @@
 <h3 class="card-title">Create new Staff</h3>
 <hr />
 <br />
-
+<!--
 <EditForm Model="@staff" OnValidSubmit="CreateStaff">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -20,7 +20,12 @@
     <div class=" form-group">
         <label>Staff Position: </label>
         <div>
-            <InputText @bind-Value="@staff.StaffPosition" class="form-control" />
+            <InputSelect @bind-Value="@staff.StaffPosition" class="form-control">
+                <option value="">--Select Staff Position--</option>
+                <option value="">Deliverer</option>
+                <option value="">Store Staff</option>
+
+            </InputSelect>
             <ValidationMessage For="@(() => staff.StaffPosition)" />
         </div>
     </div>
@@ -36,6 +41,8 @@
         Create Staff
     </button>
 </EditForm>
+-->
+<FormComponent ButtonText="Create Staff" staff="staff" OnValidSubmit="@CreateStaff" />
 
 @code{
     Staff staff = new Staff();

@@ -5,12 +5,13 @@
 <h3 class="card-title">Create new Order</h3>
 <hr />
 <br />
-
+<FormComponent ButtonText="Create Order" order="order" OnValidSubmit="@CreateOrder" />
+<!--
 <EditForm Model="@order" OnValidSubmit="CreateOrder">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class=" form-group">
-        <label>Order Name: </label>
+        <label>Customer Name: </label>
         <div>
             <InputSelect @bind-Value="@order.CustomerID" class="form-control">
                 <option value="">-- Select Customer--</option>
@@ -25,13 +26,17 @@
             <ValidationMessage For="@(() => order.CustomerID)" />
         </div>
     </div>
-    <!-- <div class=" form-group">
-         <label>Order Fee: </label>
-         <div>
-             <InputNumber @bind-Value="@order.OrderFee" class="form-control" />
-             <ValidationMessage For="@(() => order.OrderFee)" />
-         </div>
-     </div> -->
+    
+    <div class=" form-group">
+        <label>Order Fee: </label>
+        <div>
+            <InputNumber @bind-Value="@order.OrderFee" class="form-control" />
+            <ValidationMessage For="@(() => order.OrderFee)" />
+        </div>
+    </div>
+        
+@if (order.Id > 0)
+{
     <div class=" form-group">
         <label>Order Date Time: </label>
         <div>
@@ -39,44 +44,44 @@
             <ValidationMessage For="@(() => order.OrderTime)" />
         </div>
     </div>
-
-    <div class=" form-group">
-        <label>Deliverer: </label>
-        <div>
-            <InputSelect @bind-Value="@order.StaffID" class="form-control">
-                <option value="">-- Select Deliverer--</option>
-                @if (Staffs != null)
+}
+<div class=" form-group">
+    <label>Deliverer: </label>
+    <div>
+        <InputSelect @bind-Value="@order.StaffID" class="form-control">
+            <option value="">-- Select Deliverer--</option>
+            @if (Staffs != null)
+            {
+                foreach (var staff in Staffs)
                 {
-                    foreach (var staff in Staffs)
-                    {
-                        <option value="@staff.Id">@staff.StaffName, @staff.StaffPosition</option>
-                    }
+                    <option value="@staff.Id">@staff.StaffName, @staff.StaffPosition</option>
                 }
-            </InputSelect>
-            <ValidationMessage For="@(() => order.StaffID)" />
-        </div>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => order.StaffID)" />
     </div>
-    <div class=" form-group">
-        <label>Payment Type: </label>
-        <div>
-            <InputSelect @bind-Value="@order.PaymentID" class="form-control">
-                <option value="">-- Select Payment--</option>
-                @if (Payments != null)
+</div>
+<div class=" form-group">
+    <label>Payment Type: </label>
+    <div>
+        <InputSelect @bind-Value="@order.PaymentID" class="form-control">
+            <option value="">-- Select Payment--</option>
+            @if (Payments != null)
+            {
+                foreach (var payment in Payments)
                 {
-                    foreach (var payment in Payments)
-                    {
-                        <option value="@payment.Id">@payment.PaymentType</option>
-                    }
+                    <option value="@payment.Id">@payment.PaymentType</option>
                 }
-            </InputSelect>
-            <ValidationMessage For="@(() => order.PaymentID)" />
-        </div>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => order.PaymentID)" />
     </div>
-    <button type="submit" class="btn btn-success btn-block">
-        Create Order
-    </button>
+</div>
+<button type="submit" class="btn btn-success btn-block">
+    Create Order
+</button>
 </EditForm>
-
+-->
 <!--
 <FormComponent ButtonText="Create Order" order="order" OnValidSubmit="@CreateOrder" />
     -->
@@ -101,4 +106,4 @@
     }
 
 
-} 
+}

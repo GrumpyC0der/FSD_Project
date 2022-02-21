@@ -2,11 +2,13 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class=" form-group">
-        <label>Staff ID: </label>
-        <div>
-            <InputNumber @bind-Value="@staff.Id" class="form-control" />
-            <ValidationMessage For="@(() => staff.Id)" />
-        </div>
+        <!--
+    <label>Staff ID: </label>
+    <div>
+        <InputNumber @bind-Value="@staff.Id" class="form-control" />
+        <ValidationMessage For="@(() => staff.Id)" />
+    </div>
+        -->
         <label>Staff Name: </label>
         <div>
             <InputText @bind-Value="@staff.StaffName" class="form-control" />
@@ -17,7 +19,12 @@
     <div class=" form-group">
         <label>Staff Position: </label>
         <div>
-            <InputText @bind-Value="@staff.StaffPosition" class="form-control" />
+            <InputSelect @bind-Value="@staff.StaffPosition" class="form-control">
+                <option value="">--Select Staff Position--</option>
+                <option value="Deliverer">Deliverer</option>
+                <option value="Store Staff">Store Staff</option>
+
+            </InputSelect>
             <ValidationMessage For="@(() => staff.StaffPosition)" />
         </div>
     </div>
@@ -36,7 +43,8 @@
             @ButtonText
         </button>
     }
-    </EditForm>
+    <BacktoList Target="staffs" />
+</EditForm>
 
 @code {
     [Parameter] public bool Disabled { get; set; } = false;

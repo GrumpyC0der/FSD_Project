@@ -12,7 +12,7 @@
     </div>
 
     <div class=" form-group">
-        <label>Food Position: </label>
+        <label>Food Price: </label>
         <div>
             <InputNumber @bind-Value="@food.FoodPrice" class="form-control" />
             <ValidationMessage For="@(() => food.FoodPrice)" />
@@ -42,6 +42,7 @@
             @ButtonText
         </button>
     }
+    <BacktoList Target="foods" />
 </EditForm>
 
 

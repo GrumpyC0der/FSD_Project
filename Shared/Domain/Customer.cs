@@ -10,7 +10,7 @@ namespace FSD_Project.Shared.Domain
     public class Customer : BaseDomainModel
     {
         [Required]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "First Name does not meet length requirements")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name does not meet length requirements")]
         public string CustomerName { get; set; }
 
         [Required]

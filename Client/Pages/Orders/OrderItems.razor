@@ -1,4 +1,5 @@
-﻿@page "/orders/orderitems"
+﻿<!--
+@page "/orders/orderitems/{id:int}"
 @inject HttpClient _client
 @inject NavigationManager _navManager
 
@@ -13,7 +14,7 @@
         <label>Select Food: </label>
         <div>
             <InputSelect @bind-Value="@orderitem.FoodID" class="form-control">
-                <option value="">-- Select Food--</option>
+                <option value="">--Select Food--</option>
                 @if (Foods != null)
                 {
                     foreach (var food in Foods)
@@ -26,7 +27,7 @@
         </div>
     </div>
     <div class=" form-group">
-        <label>Order Fee: </label>
+        <label>Order Quantity: </label>
         <div>
             <InputNumber @bind-Value="@orderitem.OrderQuantity" class="form-control" />
             <ValidationMessage For="@(() => orderitem.OrderQuantity)" />
@@ -38,6 +39,7 @@
 </EditForm>
 
 @code{
+
     OrderItem orderitem = new OrderItem();
 
     private IList<Order> Orders;
@@ -51,9 +53,87 @@
 
     private async Task AddOrderItem()
     {
-        await _client.PostAsJsonAsync(Endpoints.OrdersEndpoint, orderitem);
+        await _client.PostAsJsonAsync(Endpoints.OrderItemsEndpoint, orderitem);
         _navManager.NavigateTo("/orders/");
     }
 
+}
+    -->
 
-} 
+@page "/orders/orderitems/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Add Order Items</h3>
+<hr />
+<br />
+
+<EditForm Model="@orderitem" OnValidSubmit="AddOrderItems">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class=" form-group">
+        <label>Select Food: </label>
+        <div>
+            <InputSelect @bind-Value="@orderitem.FoodID" class="form-control">
+                <option value="">--Select Food--</option>
+                @if (Foods != null)
+                {
+                    foreach (var food in Foods)
+                    {
+                        <option value="@food.Id">@food.FoodName, @food.FoodPrice</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => orderitem.FoodID)" />
+        </div>
+    </div>
+    <div class=" form-group">
+        <label>Order Quantity: </label>
+        <div>
+            <InputNumber @bind-Value="@orderitem.OrderQuantity" class="form-control" />
+            <ValidationMessage For="@(() => orderitem.OrderQuantity)" />
+        </div>
+    </div>
+    <p>Total cost is:<br>
+        <span>$@order.OrderFee </span>
+    </p>
+    <h5 class="alert">Inclusive of a $5 Delivery Fee</h5>
+    <button type="submit" class="btn btn-success btn-block">
+        Add Order Items
+    </button>
+</EditForm>
+<!--
+<FormComponent ButtonText="Create Order" order="order" OnValidSubmit="@CreateOrder" />
+    -->
+@code{
+    [Parameter] public int id { get; set; }
+    Food food = new Food();
+    Order order = new Order();
+    OrderItem orderitem = new OrderItem();
+
+
+    private IList<Food> Foods;
+    private IList<Order> Orders;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+        Orders = await _client.GetFromJsonAsync<List<Order>>($"{Endpoints.OrdersEndpoint}");
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+
+        order = await _client.GetFromJsonAsync<Order>($"{Endpoints.OrdersEndpoint}/{id}");
+    }
+
+    private async Task AddOrderItems()
+    {
+        food = await _client.GetFromJsonAsync<Food>($"{Endpoints.FoodsEndpoint}/{orderitem.FoodID}");
+        order.OrderFee = (orderitem.OrderQuantity * food.FoodPrice) + 5;
+        await _client.PutAsJsonAsync($"{Endpoints.OrdersEndpoint}/{id}", order);
+        await _client.PostAsJsonAsync(Endpoints.OrderItemsEndpoint, orderitem);
+        _navManager.NavigateTo("/orders/");
+    }
+
+}

@@ -4,7 +4,8 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class=" form-group">
-        <label>Order Name: </label>
+
+        <label>Customer Name: </label>
         <div>
             <InputSelect @bind-Value="@order.CustomerID" class="form-control">
                 <option value="">-- Select Customer--</option>
@@ -19,6 +20,7 @@
             <ValidationMessage For="@(() => order.CustomerID)" />
         </div>
     </div>
+    <!--
     <div class=" form-group">
         <label>Order Fee: </label>
         <div>
@@ -26,6 +28,7 @@
             <ValidationMessage For="@(() => order.OrderFee)" />
         </div>
     </div>
+        -->
     <div class=" form-group">
         <label>Order Date Time: </label>
         <div>
@@ -50,9 +53,30 @@
             <ValidationMessage For="@(() => order.StaffID)" />
         </div>
     </div>
-    <button type="submit" class="btn btn-success btn-block">
-        Create Order
-    </button>
+    <div class=" form-group">
+        <label>Payment Type: </label>
+        <div>
+            <InputSelect @bind-Value="@order.PaymentID" class="form-control">
+                <option value="">-- Select Payment--</option>
+                @if (Payments != null)
+                {
+                    foreach (var payment in Payments)
+                    {
+                        <option value="@payment.Id">@payment.PaymentType</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => order.PaymentID)" />
+        </div>
+    </div>
+    @if (!Disabled)
+    {
+        <br />
+        <button type="submit" class="btn btn-success btn-block">
+            @ButtonText
+        </button>
+    }
+    <BacktoList Target="orders" />
 </EditForm>
 
 @code {

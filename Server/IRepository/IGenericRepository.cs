@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using FSD_Project.Shared.Domain;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace FSD_Project.Server.IRepository
 {
     public interface IGenericRepository<T> where T : class
     {
+        Order OrderId { get; }
+
         Task<IList<T>> GetAll(
             Expression<Func<T, bool>> expression = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

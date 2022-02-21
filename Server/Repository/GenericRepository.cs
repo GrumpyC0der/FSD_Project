@@ -1,5 +1,6 @@
 ﻿using FSD_Project.Server.Data;
 using FSD_Project.Server.IRepository;
+using FSD_Project.Shared.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -20,6 +21,8 @@ namespace FSD_Project.Server.Repository
             _context = context;
             _db = _context.Set<T>();
         }
+
+        public Order OrderId => throw new NotImplementedException();
 
         public async Task Delete(int id)
         {
